@@ -1,0 +1,12 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_share"
+        yourapp:showAsAction="never"
+        android:title="@string/action_share"/>
+    <item
+        android:id="@+id/action_rate"
+        yourapp:showAsAction="never"
+        android:title="@string/action_rate" />
+</menu>
