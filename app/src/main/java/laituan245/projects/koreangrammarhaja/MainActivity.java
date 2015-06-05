@@ -16,6 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.ScrollView;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -130,6 +131,9 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         InformationFragment grammarInfoFrag = (InformationFragment)
                 getSupportFragmentManager().findFragmentById(R.id.information_fragment);
         grammarInfoFrag.updateInformationView(position);
+
+        ScrollView mScrollView = ((ScrollView) findViewById(R.id.textAreaScroller));
+        mScrollView.scrollTo(0, mScrollView.getTop());
     }
 
     @Override
