@@ -22,9 +22,16 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
+import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
+import it.gmariotti.cardslib.library.internal.CardHeader;
+import it.gmariotti.cardslib.library.view.CardListView;
+
 public class MainActivity extends ActionBarActivity implements GrammarLabelsFragment.OnGrammarLabelSelectedListener {
 
     public static ArrayList<GrammarRecord> allGrammarArray;
+    private static final String SELECTED_TAB_POS_KEY = "SELECTED_TAB_POS_KEY";
+    private CardArrayAdapter mCardArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
 
         setContentView(R.layout.activity_home);
 
+        // Configuring the action bar
         android.support.v7.app.ActionBar actionBar =  getSupportActionBar() ;
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#66CCFF")));
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
@@ -41,15 +49,41 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         actionBar.setIcon(R.drawable.ic_launcher);
         actionBar.setStackedBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFFFFF")));
 
+        // Setting up the tabs
         establishTabs();
+
+        // Setting up CardList
+        ArrayList<Card> cards = new ArrayList<Card>();
+        mCardArrayAdapter = new CardArrayAdapter(this,cards);
+        CardListView cardListView = (CardListView) findViewById(R.id.myCardList);
+        if (cardListView!=null){
+            cardListView.setAdapter(mCardArrayAdapter);
+        }
+
+
+        // Setting visibility of various components
+        if (savedInstanceState != null)
+            actionBar.selectTab(actionBar.getTabAt(savedInstanceState.getInt(SELECTED_TAB_POS_KEY,0)));
+        if (actionBar.getSelectedTab().getPosition() == 0) {       // Home tab selected
+            (findViewById(R.id.container1)).setVisibility(View.VISIBLE);
+            (findViewById(R.id.container2)).setVisibility(View.INVISIBLE);
+        }
+        else if (actionBar.getSelectedTab().getPosition() == 1) {  // Confusions tab selected
+            (findViewById(R.id.container1)).setVisibility(View.INVISIBLE);
+            (findViewById(R.id.container2)).setVisibility(View.VISIBLE);
+        }
+
 
         if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             if (savedInstanceState == null || InformationFragment.mCurrentPosition == -1) {
                 (findViewById(R.id.information_fragment)).setVisibility(View.GONE);
             }
             else {
-                (findViewById(R.id.information_fragment)).setVisibility(View.VISIBLE);
-                actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                int tempInt = savedInstanceState.getInt(SELECTED_TAB_POS_KEY, 0);
+                if (tempInt == 0) {
+                    (findViewById(R.id.information_fragment)).setVisibility(View.VISIBLE);
+                    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                }
             }
         }
 
@@ -66,6 +100,16 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        int savedInt = 0;
+        if ((findViewById(R.id.container2)).getVisibility() == View.VISIBLE)
+            savedInt = 1;
+        outState.putInt(SELECTED_TAB_POS_KEY,  savedInt);
+    }
+
+
     private void establishTabs () {
         android.support.v7.app.ActionBar actionBar =  getSupportActionBar() ;
 
@@ -75,6 +119,14 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                 // show the given tab
+                if (tab.getPosition() == 0) {       // Home tab selected
+                    (findViewById(R.id.container1)).setVisibility(View.VISIBLE);
+                    (findViewById(R.id.container2)).setVisibility(View.INVISIBLE);
+                }
+                else if (tab.getPosition() == 1) {  // Confusions tab selected
+                    (findViewById(R.id.container1)).setVisibility(View.INVISIBLE);
+                    (findViewById(R.id.container2)).setVisibility(View.VISIBLE);
+                }
 
             }
 
@@ -89,7 +141,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
 
         // Add 2 tabs, specifying the tab's text and TabListener
         actionBar.addTab(actionBar.newTab().setText("Home").setTabListener(tabListener));
-        actionBar.addTab(actionBar.newTab().setText("History").setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab().setText("  Confusing Grammar  ").setTabListener(tabListener));
         
     }
 

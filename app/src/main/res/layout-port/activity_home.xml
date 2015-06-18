@@ -4,16 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment
-        android:name="laituan245.projects.koreangrammarhaja.GrammarLabelsFragment"
-        android:id="@+id/article_fragment"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:id="@+id/container1">
+        <fragment
+            android:name="laituan245.projects.koreangrammarhaja.GrammarLabelsFragment"
+            android:id="@+id/article_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-    <fragment
-        android:name="laituan245.projects.koreangrammarhaja.InformationFragment"
-        android:id="@+id/information_fragment"
+        <fragment
+            android:name="laituan245.projects.koreangrammarhaja.InformationFragment"
+            android:id="@+id/information_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </FrameLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:id="@+id/container2">
+
+        <it.gmariotti.cardslib.library.view.CardListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/myCardList"/>
+
+    </LinearLayout>
 
 </FrameLayout>
