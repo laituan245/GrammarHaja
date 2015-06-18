@@ -116,6 +116,8 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 i.putExtra(android.content.Intent.EXTRA_TEXT, "This is an awesome app for learning Korean. https://play.google.com/store/apps/details?id=laituan245.projects.koreangrammarhaja");
                 startActivity(Intent.createChooser(i,"Share via"));
                 return true;
+            case R.id.action_setting:
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
