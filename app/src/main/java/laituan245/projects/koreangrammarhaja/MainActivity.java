@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,12 +23,12 @@ import java.util.ArrayList;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
-import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.view.CardListView;
 
 public class MainActivity extends ActionBarActivity implements GrammarLabelsFragment.OnGrammarLabelSelectedListener {
 
     public static ArrayList<GrammarRecord> allGrammarArray;
+    public static ArrayList<ConfusingGrammarArticle> allArticleArray;
     private static final String SELECTED_TAB_POS_KEY = "SELECTED_TAB_POS_KEY";
     private CardArrayAdapter mCardArrayAdapter;
 
@@ -59,7 +58,12 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         if (cardListView!=null){
             cardListView.setAdapter(mCardArrayAdapter);
         }
-
+        for (int i = 0; i < allArticleArray.size(); i++)
+        {
+            Card card = new Card(this);
+            card.setTitle(allArticleArray.get(i).getTitle());
+            mCardArrayAdapter.add(card);
+        }
 
         // Setting visibility of various components
         if (savedInstanceState != null)
@@ -202,7 +206,8 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
     }
 
     private void loadTheDatabase() {
-        DataBaseHelper myDbHelper = new DataBaseHelper(this);
+        // Load the first table
+        DbHelper_GrammarInfoTable myDbHelper = new DbHelper_GrammarInfoTable(this);
         try {
             myDbHelper.createDataBase();
         }
@@ -213,6 +218,23 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         try {
             myDbHelper.openDataBase();
             allGrammarArray = myDbHelper.getAllElements(true);
+        }
+        catch(SQLException sqle){
+            throw sqle;
+        }
+
+        // Load the second table
+        DbHelper_ConfusingGrammarTable myDbHelper2 = new DbHelper_ConfusingGrammarTable(this);
+        try {
+            myDbHelper2.createDataBase();
+        }
+        catch (IOException ioe) {
+            throw new Error("Unable to create database");
+        }
+
+        try {
+            myDbHelper2.openDataBase();
+            allArticleArray = myDbHelper2.getAllElements(true);
         }
         catch(SQLException sqle){
             throw sqle;

@@ -14,7 +14,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 
-public class DataBaseHelper extends SQLiteOpenHelper {
+public class DbHelper_GrammarInfoTable extends SQLiteOpenHelper {
 
     //The Android's default system path of your application database.
     private static String DB_PATH = "/data/data/laituan245.projects.koreangrammarhaja/databases/";
@@ -28,7 +28,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
      * Takes and keeps a reference of the passed context in order to access to the application assets and resources.
      * @param context
      */
-    public DataBaseHelper(Context context) {
+    public DbHelper_GrammarInfoTable(Context context) {
 
         super(context, DB_NAME, null, 1);
         this.myContext = context;

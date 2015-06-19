@@ -25,9 +25,9 @@ dependencies {
 }
 
 dependencies {
-    //Core card library
-    compile 'com.github.gabrielemariotti.cards:library:1.9.1'
+    //Core
+    compile 'com.github.gabrielemariotti.cards:cardslib-core:2.0.1'
 
-    //Extra card library, it is required only if you want to use integrations with other libraries
-    compile 'com.github.gabrielemariotti.cards:library-extra:1.9.1'
+    //Optional for built-in cards
+    compile 'com.github.gabrielemariotti.cards:cardslib-cards:2.0.1'
 }
