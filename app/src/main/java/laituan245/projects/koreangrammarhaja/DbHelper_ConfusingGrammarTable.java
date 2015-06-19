@@ -172,6 +172,7 @@ public class DbHelper_ConfusingGrammarTable extends SQLiteOpenHelper {
                         obj.setTitle(cursor.getString(1));
                         obj.setContent(cursor.getString(2));
                         obj.setDifficulty_level(cursor.getString(3));
+                        obj.setShort_description(cursor.getString(4));
                         list.add(obj);
                     } while (cursor.moveToNext());
                 }

@@ -24,10 +24,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/container2">
+        android:id="@+id/container2"
+        android:layout_margin="10dp"
+        >
 
         <it.gmariotti.cardslib.library.view.CardListView
-            android:paddingTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/myCardList"
