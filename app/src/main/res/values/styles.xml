@@ -382,7 +382,8 @@
 
     <!-- Base list -->
     <style name="native_list_card.base" >
-
+        <item name="android:layout_marginBottom">0dp</item>
+        <item name="android:layout_marginTop">0dp</item>
     </style>
 
 
