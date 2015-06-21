@@ -24,6 +24,12 @@
             android:theme="@style/AppTheme"
             android:label="@string/app_name">
         </activity>
+
+        <activity
+            android:name=".ConfusingGrammarActivity"
+            android:theme="@style/AppTheme"
+            android:label="@string/app_name">
+        </activity>
     </application>
 
 </manifest>

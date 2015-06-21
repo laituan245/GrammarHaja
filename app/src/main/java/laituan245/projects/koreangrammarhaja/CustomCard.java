@@ -1,6 +1,7 @@
 package laituan245.projects.koreangrammarhaja;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -28,7 +29,8 @@ public class CustomCard extends Card {
         setOnClickListener(new OnCardClickListener() {
             @Override
             public void onClick(Card card, View view) {
-            //Toast.makeText(getContext(), "Click Listener card=", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(card.getContext(), ConfusingGrammarActivity.class);
+                card.getContext().startActivity(intent);
             }
         });
     }
