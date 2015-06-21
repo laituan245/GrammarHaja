@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -67,6 +68,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 CustomCard card = new CustomCard(this, R.layout.card_inner_layout);
                 card.setTitle(allArticleArray.get(i).getTitle());
                 card.setShortDescription(allArticleArray.get(i).getShort_description());
+                card.setContent(allArticleArray.get(i).getContent());
                 mCardArrayAdapter.add(card);
             }
 
@@ -147,6 +149,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                             CustomCard card = new CustomCard(mContext, R.layout.card_inner_layout);
                             card.setTitle(allArticleArray.get(i).getTitle());
                             card.setShortDescription(allArticleArray.get(i).getShort_description());
+                            card.setContent(allArticleArray.get(i).getContent());
                             mCardArrayAdapter.add(card);
                         }
 

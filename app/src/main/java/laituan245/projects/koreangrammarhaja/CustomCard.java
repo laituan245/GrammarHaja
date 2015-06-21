@@ -2,6 +2,7 @@ package laituan245.projects.koreangrammarhaja;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import it.gmariotti.cardslib.library.internal.Card;
 public class CustomCard extends Card {
     protected String title;
     protected String shortDescription = "Welcome";
+    protected String content;
 
     public CustomCard(Context context, int innerLayout) {
         super(context, innerLayout);
@@ -30,9 +32,19 @@ public class CustomCard extends Card {
             @Override
             public void onClick(Card card, View view) {
                 Intent intent = new Intent(card.getContext(), ConfusingGrammarActivity.class);
+                intent.putExtra(ConfusingGrammarActivity.CONFUSING_GRAMMAR_CONTENT_KEY, content);
+                intent.putExtra(ConfusingGrammarActivity.CONFUSING_GRAMMAR_TITLE_KEY, title);
                 card.getContext().startActivity(intent);
             }
         });
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 
     @Override
