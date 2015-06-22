@@ -45,6 +45,7 @@ public class GrammarLabelsFragment extends ListFragment {
         }
     }
 
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

@@ -1,5 +1,6 @@
 package laituan245.projects.koreangrammarhaja;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -52,6 +53,15 @@ public class InformationFragment extends Fragment {
 
     public void updateInformationView(int position) {
         TextView information = (TextView) getActivity().findViewById(R.id.information);
+        if (position == -1) {
+            information.setText("");
+            mCurrentPosition = -1;
+            return;
+        }
+        // Set the text size appropriately
+        if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            information.setTextSize(16);
+        }
         information.setText(Html.fromHtml(preProcessingGrammarInfo(InformationArray[position], GrammarLabelsFragment.GrammarLabels[position])));
         mCurrentPosition = position;
     }

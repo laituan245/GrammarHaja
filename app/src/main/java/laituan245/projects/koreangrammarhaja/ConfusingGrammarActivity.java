@@ -1,6 +1,7 @@
 package laituan245.projects.koreangrammarhaja;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -59,7 +60,12 @@ public class ConfusingGrammarActivity extends ActionBarActivity {
         // Get data from the intent
         title = this.getIntent().getExtras().getString(CONFUSING_GRAMMAR_TITLE_KEY);
         content = this.getIntent().getExtras().getString(CONFUSING_GRAMMAR_CONTENT_KEY);
-        ((TextView) (findViewById(R.id.content_textview))).setText(Html.fromHtml(HTMLPreprocessing(content, title)));
+        TextView mTextView = ((TextView) (findViewById(R.id.content_textview)));
+        mTextView.setText(Html.fromHtml(HTMLPreprocessing(content, title)));
+        // Set the text size appropriately
+        if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            mTextView.setTextSize(16);
+        }
 
         // Force the overflow button to appear on the action bar
         try {

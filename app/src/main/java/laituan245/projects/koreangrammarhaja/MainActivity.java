@@ -98,6 +98,8 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 }
             }
 
+            //
+
             // Force the overflow button to appear on the action bar
             try {
                 ViewConfiguration config = ViewConfiguration.get(this);
@@ -110,6 +112,8 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 // Ignore
             }
         }
+
+
 
         @Override
         public void onSaveInstanceState(Bundle outState) {
@@ -137,6 +141,15 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                     else if (tab.getPosition() == 1) {  // Confusions tab selected
                         (findViewById(R.id.container1)).setVisibility(View.INVISIBLE);
                         (findViewById(R.id.container2)).setVisibility(View.VISIBLE);
+
+                        // "Resetting" the content of tab "Home"
+                        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                            (findViewById(R.id.information_fragment)).setVisibility(View.GONE);
+                        InformationFragment grammarInfoFrag = (InformationFragment)
+                                getSupportFragmentManager().findFragmentById(R.id.information_fragment);
+                        grammarInfoFrag.updateInformationView(-1);
+
+
                         // Setting up CardList
                         ArrayList<Card> cards = new ArrayList<Card>();
                         mCardArrayAdapter = new CardArrayAdapter(mContext,cards);
@@ -184,6 +197,14 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         public boolean onOptionsItemSelected(MenuItem item) {
             // Handle presses on the action bar items
             switch (item.getItemId()) {
+                case android.R.id.home:
+                    if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && InformationFragment.mCurrentPosition != -1) {
+                        (findViewById(R.id.information_fragment)).setVisibility(View.GONE);
+                        InformationFragment.mCurrentPosition = -1;
+                        getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+                        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                    }
+                    return true;
                 case R.id.action_rate:
                     Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=laituan245.projects.koreangrammarhaja"));
                     startActivity(browserIntent);
@@ -207,6 +228,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 (findViewById(R.id.information_fragment)).setVisibility(View.VISIBLE);
                 android.support.v7.app.ActionBar actionBar =  getSupportActionBar() ;
                 actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
 
             InformationFragment grammarInfoFrag = (InformationFragment)
@@ -223,6 +245,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 (findViewById(R.id.information_fragment)).setVisibility(View.GONE);
                 InformationFragment.mCurrentPosition = -1;
                 getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             }
             else
                 finish();
@@ -269,6 +292,12 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             super.onResume();
             if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && InformationFragment.mCurrentPosition == -1)
                 (findViewById(R.id.information_fragment)).setVisibility(View.GONE);
+
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                if ((findViewById(R.id.container1).getVisibility() == View.VISIBLE) && (findViewById(R.id.information_fragment).getVisibility() == View.VISIBLE))
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         }
 
 
