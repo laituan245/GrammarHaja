@@ -2,6 +2,7 @@ package laituan245.projects.koreangrammarhaja;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,11 @@ public class CustomCard extends Card {
         //Retrieve elements
         TextView mTitle = (TextView) parent.findViewById(R.id.card_inner_simple_title);
         TextView mShortDescription = (TextView) parent.findViewById(R.id.card_inner_short_description);
+
+        // Set the text size appropriately
+        if ((parent.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            mShortDescription.setTextSize(15);
+        }
 
         mTitle.setText(title);
         mShortDescription.setText(shortDescription);

@@ -168,7 +168,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
 
             // Add 2 tabs, specifying the tab's text and TabListener
             actionBar.addTab(actionBar.newTab().setText("Home").setTabListener(tabListener));
-            actionBar.addTab(actionBar.newTab().setText("   Confusing Grammar   ").setTabListener(tabListener));
+            actionBar.addTab(actionBar.newTab().setText("  Confusing Grammar  ").setTabListener(tabListener));
 
         }
 

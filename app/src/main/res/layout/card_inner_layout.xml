@@ -21,7 +21,7 @@
             android:id="@+id/colorBorder"
             android:background="@drawable/rectangle"
             android:layout_width="11dp"
-            android:layout_height="@dimen/card_base_empty_height"/>
+            android:layout_height="match_parent"/>
 
         <TextView
             android:id="@+id/card_inner_short_description"
