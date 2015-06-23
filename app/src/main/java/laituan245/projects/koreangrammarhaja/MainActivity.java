@@ -9,8 +9,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.ScrollView;
-
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.OnQueryTextListener;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -27,13 +30,14 @@ import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.view.CardListView;
 
-public class MainActivity extends ActionBarActivity implements GrammarLabelsFragment.OnGrammarLabelSelectedListener {
+public class MainActivity extends ActionBarActivity implements GrammarLabelsFragment.OnGrammarLabelSelectedListener, OnQueryTextListener{
 
         public static ArrayList<GrammarRecord> allGrammarArray;
         public static ArrayList<ConfusingGrammarArticle> allArticleArray;
         private static final String SELECTED_TAB_POS_KEY = "SELECTED_TAB_POS_KEY";
         private CardArrayAdapter mCardArrayAdapter;
         private Context mContext;
+        private SearchView mSearchView;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +103,6 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             }
 
             //
-
             // Force the overflow button to appear on the action bar
             try {
                 ViewConfiguration config = ViewConfiguration.get(this);
@@ -113,7 +116,16 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             }
         }
 
+        public boolean onQueryTextChange(String newText) {
+            GrammarLabelsFragment grammarLabelsFrag = (GrammarLabelsFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.article_fragment);
+            grammarLabelsFrag.filterText(newText);
+            return true;
+        }
 
+        public boolean onQueryTextSubmit(String query) {
+            return false;
+        }
 
         @Override
         public void onSaveInstanceState(Bundle outState) {
@@ -187,10 +199,29 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
 
         @Override
         public boolean onCreateOptionsMenu(Menu menu) {
+            super.onCreateOptionsMenu(menu);
+
             // Inflate the menu items for use in the action bar
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.main_activity_actions, menu);
-            return super.onCreateOptionsMenu(menu);
+
+            // Setting up the search view
+            MenuItem searchItem = menu.findItem(R.id.action_search);
+            mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            if (mSearchView != null) {
+                mSearchView.setOnQueryTextListener(this);
+            }
+            setupSearchView();
+
+            return true;
+        }
+
+        private void setupSearchView() {
+
+            mSearchView.setIconifiedByDefault(false);
+            mSearchView.setOnQueryTextListener(this);
+            mSearchView.setSubmitButtonEnabled(true);
+            mSearchView.setQueryHint("Enter Korean text only");
         }
 
         @Override
