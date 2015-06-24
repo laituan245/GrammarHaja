@@ -12,6 +12,7 @@ import android.widget.ListView;
 public class GrammarLabelsFragment extends ListFragment {
     OnGrammarLabelSelectedListener mCallback;
     static String[] GrammarLabels;
+    public static int[] LabelMapping;
     private int layout;
 
     public interface OnGrammarLabelSelectedListener {
@@ -24,6 +25,8 @@ public class GrammarLabelsFragment extends ListFragment {
 
         layout = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ?
                 android.R.layout.simple_list_item_activated_1 : android.R.layout.simple_list_item_1;
+
+        LabelMapping = new int[MainActivity.allGrammarArray.size()];
 
         String tempString;
         GrammarLabels = new String[MainActivity.allGrammarArray.size()];
@@ -70,6 +73,7 @@ public class GrammarLabelsFragment extends ListFragment {
         for (int i = 0; i < n; i++)
             if (passedFilter[i])
             {
+                LabelMapping[tempIndex] = i;
                 tempGrammarLabels[tempIndex] = GrammarLabels[i];
                 tempIndex++;
             }

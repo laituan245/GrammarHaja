@@ -253,6 +253,9 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             if (this.findViewById(R.id.container2).getVisibility() == View.VISIBLE)
                 HideSomeMenuItems();
 
+            if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && this.findViewById(R.id.information_fragment).getVisibility() == View.VISIBLE)
+                HideSomeMenuItems();
+
             // Check if we should expand the search view and set the query appropriately
             if (this.saved_searchMenuItem_expanded) {
                 this.searchMenuItem.expandActionView();
@@ -305,7 +308,8 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         }
 
         public void onGrammarSelected(int position) {
-
+            if (searchMenuItem.isActionViewExpanded())
+                position = GrammarLabelsFragment.LabelMapping[position];
             if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 (findViewById(R.id.information_fragment)).setVisibility(View.VISIBLE);
                 android.support.v7.app.ActionBar actionBar =  getSupportActionBar() ;
@@ -322,6 +326,8 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
 
             if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && this.findViewById(R.id.information_fragment).getVisibility() == View.VISIBLE)
                 HideSomeMenuItems();
+
+            searchMenuItem.collapseActionView();
         }
 
         @Override
