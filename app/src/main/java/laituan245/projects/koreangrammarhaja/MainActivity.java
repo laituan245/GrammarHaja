@@ -12,8 +12,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,12 +33,27 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         public static ArrayList<GrammarRecord> allGrammarArray;
         public static ArrayList<ConfusingGrammarArticle> allArticleArray;
         private static final String SELECTED_TAB_POS_KEY = "SELECTED_TAB_POS_KEY";
+        private static final String SEARCH_MENU_ITEM_EXPANDING_KEY = "SEARCH_MENU_ITEM_EXPANDING_KEY";
+        private static final String SEARCH_TEXT_KEY = "SEARCH_TEXT_KEY";
         private CardArrayAdapter mCardArrayAdapter;
         private Context mContext;
         private SearchView mSearchView;
-
+        private Menu mMenu;
+        private MenuItem searchMenuItem;
+        private boolean saved_searchMenuItem_expanded = false;
+        private String saved_query_string = "";
         @Override
         protected void onCreate(Bundle savedInstanceState) {
+            saved_searchMenuItem_expanded = false;
+            saved_query_string = "";
+            if (savedInstanceState != null) {
+                if (savedInstanceState.getBoolean(SEARCH_MENU_ITEM_EXPANDING_KEY))
+                {
+                    saved_searchMenuItem_expanded = true;
+                    saved_query_string = savedInstanceState.getString(SEARCH_TEXT_KEY);
+                }
+            }
+
             super.onCreate(savedInstanceState);
 
             loadTheDatabase();
@@ -102,7 +115,6 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 }
             }
 
-            //
             // Force the overflow button to appear on the action bar
             try {
                 ViewConfiguration config = ViewConfiguration.get(this);
@@ -133,9 +145,20 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             int savedInt = 0;
             if ((findViewById(R.id.container2)).getVisibility() == View.VISIBLE)
                 savedInt = 1;
-            outState.putInt(SELECTED_TAB_POS_KEY,  savedInt);
+            outState.putInt(SELECTED_TAB_POS_KEY, savedInt);
+            outState.putBoolean(SEARCH_MENU_ITEM_EXPANDING_KEY, searchMenuItem.isActionViewExpanded());
+            if (searchMenuItem.isActionViewExpanded())
+                outState.putString(SEARCH_TEXT_KEY, mSearchView.getQuery().toString());
         }
 
+        private void ShowSomeMenuItems () {
+            searchMenuItem.setVisible(true);
+            mMenu.findItem(R.id.change_view_style).setVisible(true);
+        }
+        private void HideSomeMenuItems () {
+            searchMenuItem.setVisible(false);
+            mMenu.findItem(R.id.change_view_style).setVisible(false);
+        }
 
         private void establishTabs () {
             android.support.v7.app.ActionBar actionBar =  getSupportActionBar() ;
@@ -149,8 +172,19 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                     if (tab.getPosition() == 0) {       // Home tab selected
                         (findViewById(R.id.container1)).setVisibility(View.VISIBLE);
                         (findViewById(R.id.container2)).setVisibility(View.INVISIBLE);
+
+                        // Update the menu item action_search (which contains the searchview) appropriately
+                        if (searchMenuItem != null)
+                            ShowSomeMenuItems();
                     }
                     else if (tab.getPosition() == 1) {  // Confusions tab selected
+                        // Update the searchview and the menu item action_search appropriately
+                        if (searchMenuItem != null) {
+                            searchMenuItem.collapseActionView();
+                            HideSomeMenuItems();
+                        }
+                        //
+
                         (findViewById(R.id.container1)).setVisibility(View.INVISIBLE);
                         (findViewById(R.id.container2)).setVisibility(View.VISIBLE);
 
@@ -213,6 +247,18 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             }
             setupSearchView();
 
+            this.mMenu = menu;
+            this.searchMenuItem = searchItem;
+
+            if (this.findViewById(R.id.container2).getVisibility() == View.VISIBLE)
+                HideSomeMenuItems();
+
+            // Check if we should expand the search view and set the query appropriately
+            if (this.saved_searchMenuItem_expanded) {
+                this.searchMenuItem.expandActionView();
+                mSearchView.setQuery(this.saved_query_string,true);
+            }
+
             return true;
         }
 
@@ -221,13 +267,19 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             mSearchView.setIconifiedByDefault(false);
             mSearchView.setOnQueryTextListener(this);
             mSearchView.setSubmitButtonEnabled(true);
-            mSearchView.setQueryHint("Enter Korean text only");
+            mSearchView.setQueryHint("Korean only");
+            if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE)
+                mSearchView.setQueryHint("Enter Korean text only");
+            if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE)
+                mSearchView.setQueryHint("Enter Korean text only");
         }
 
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             // Handle presses on the action bar items
             switch (item.getItemId()) {
+                case R.id.action_search:
+                    return true;
                 case android.R.id.home:
                     if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && InformationFragment.mCurrentPosition != -1) {
                         (findViewById(R.id.information_fragment)).setVisibility(View.GONE);
@@ -247,14 +299,13 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                     i.putExtra(android.content.Intent.EXTRA_TEXT, "This is an awesome app for learning Korean. https://play.google.com/store/apps/details?id=laituan245.projects.koreangrammarhaja");
                     startActivity(Intent.createChooser(i,"Share via"));
                     return true;
-                case R.id.action_setting:
-                    return true;
                 default:
                     return super.onOptionsItemSelected(item);
             }
         }
 
         public void onGrammarSelected(int position) {
+
             if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 (findViewById(R.id.information_fragment)).setVisibility(View.VISIBLE);
                 android.support.v7.app.ActionBar actionBar =  getSupportActionBar() ;
@@ -268,6 +319,9 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
 
             ScrollView mScrollView = ((ScrollView) findViewById(R.id.textAreaScroller));
             mScrollView.scrollTo(0, mScrollView.getTop());
+
+            if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && this.findViewById(R.id.information_fragment).getVisibility() == View.VISIBLE)
+                HideSomeMenuItems();
         }
 
         @Override
@@ -321,6 +375,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         @Override
         protected void onResume() {
             super.onResume();
+
             if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && InformationFragment.mCurrentPosition == -1)
                 (findViewById(R.id.information_fragment)).setVisibility(View.GONE);
 

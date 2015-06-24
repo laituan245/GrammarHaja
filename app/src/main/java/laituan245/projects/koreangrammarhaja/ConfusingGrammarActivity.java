@@ -85,6 +85,10 @@ public class ConfusingGrammarActivity extends ActionBarActivity {
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_activity_actions, menu);
+
+        (menu.findItem(R.id.action_search)).setVisible(false);
+        (menu.findItem(R.id.change_view_style)).setVisible(false);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -105,8 +109,6 @@ public class ConfusingGrammarActivity extends ActionBarActivity {
                 i.putExtra(android.content.Intent.EXTRA_SUBJECT,"Korean Haja");
                 i.putExtra(android.content.Intent.EXTRA_TEXT, "This is an awesome app for learning Korean. https://play.google.com/store/apps/details?id=laituan245.projects.koreangrammarhaja");
                 startActivity(Intent.createChooser(i,"Share via"));
-                return true;
-            case R.id.action_setting:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

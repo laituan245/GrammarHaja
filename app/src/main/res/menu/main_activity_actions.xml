@@ -12,16 +12,9 @@
 
     <item
         android:id="@+id/change_view_style"
-        yourapp:showAsAction="always"
+        yourapp:showAsAction="ifRoom"
         android:title="@string/category_view"
         android:icon="@drawable/ic_action_dashboard_view"
-    />
-
-    <item
-        android:id="@+id/action_setting"
-        yourapp:showAsAction="always"
-        android:title="@string/action_settings"
-        android:icon="@drawable/ic_action_settings"
     />
 
     <item
