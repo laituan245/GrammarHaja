@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,7 +24,7 @@ import android.support.v7.widget.SearchView.OnQueryTextListener;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-
+import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.view.CardListView;
@@ -41,17 +42,15 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         private Menu mMenu;
         private MenuItem searchMenuItem;
         private boolean saved_searchMenuItem_expanded = false;
-        private String saved_query_string = "";
+        private static String saved_query_string = "";
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             saved_searchMenuItem_expanded = false;
             saved_query_string = "";
             if (savedInstanceState != null) {
                 if (savedInstanceState.getBoolean(SEARCH_MENU_ITEM_EXPANDING_KEY))
-                {
                     saved_searchMenuItem_expanded = true;
-                    saved_query_string = savedInstanceState.getString(SEARCH_TEXT_KEY);
-                }
+                saved_query_string = savedInstanceState.getString(SEARCH_TEXT_KEY);
             }
 
             super.onCreate(savedInstanceState);
@@ -142,13 +141,17 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         @Override
         public void onSaveInstanceState(Bundle outState) {
             super.onSaveInstanceState(outState);
+            Log.d("TAG", "onSaveInstanceState");
             int savedInt = 0;
             if ((findViewById(R.id.container2)).getVisibility() == View.VISIBLE)
                 savedInt = 1;
             outState.putInt(SELECTED_TAB_POS_KEY, savedInt);
             outState.putBoolean(SEARCH_MENU_ITEM_EXPANDING_KEY, searchMenuItem.isActionViewExpanded());
-            if (searchMenuItem.isActionViewExpanded())
-                outState.putString(SEARCH_TEXT_KEY, mSearchView.getQuery().toString());
+            Log.d("TAG", "prev : " + saved_query_string);
+            if (mSearchView.getQuery().toString().length() != 0)
+                saved_query_string = mSearchView.getQuery().toString();
+            Log.d("TAG", saved_query_string);
+            outState.putString(SEARCH_TEXT_KEY, saved_query_string);
         }
 
         private void ShowSomeMenuItems () {
@@ -253,15 +256,35 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             if (this.findViewById(R.id.container2).getVisibility() == View.VISIBLE)
                 HideSomeMenuItems();
 
-            if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && this.findViewById(R.id.information_fragment).getVisibility() == View.VISIBLE)
+            boolean someCond = this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && this.findViewById(R.id.information_fragment).getVisibility() == View.VISIBLE;
+            if (someCond)
                 HideSomeMenuItems();
 
             // Check if we should expand the search view and set the query appropriately
-            if (this.saved_searchMenuItem_expanded) {
+            if (!someCond && this.saved_searchMenuItem_expanded) {
                 this.searchMenuItem.expandActionView();
                 mSearchView.setQuery(this.saved_query_string,true);
             }
 
+            // OnActionExpandListener
+            MenuItemCompat.setOnActionExpandListener(searchItem, new OnActionExpandListener () {
+                @Override
+                public boolean onMenuItemActionExpand(MenuItem menuItem) {
+                    (mMenu.findItem(R.id.change_view_style)).setVisible(false);
+                    (mMenu.findItem(R.id.action_rate)).setVisible(false);
+                    (mMenu.findItem(R.id.action_share)).setVisible(false);
+                    return true;
+                }
+
+                @Override
+                public boolean onMenuItemActionCollapse(MenuItem menuItem) {
+                    (mMenu.findItem(R.id.change_view_style)).setVisible(true);
+                    (mMenu.findItem(R.id.action_rate)).setVisible(true);
+                    (mMenu.findItem(R.id.action_share)).setVisible(true);
+                    saved_query_string = mSearchView.getQuery().toString();
+                    return true;
+                }
+            });
             return true;
         }
 
@@ -282,6 +305,8 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             // Handle presses on the action bar items
             switch (item.getItemId()) {
                 case R.id.action_search:
+                    this.searchMenuItem.expandActionView();
+                    mSearchView.setQuery(saved_query_string, true);
                     return true;
                 case android.R.id.home:
                     if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && InformationFragment.mCurrentPosition != -1) {
@@ -324,10 +349,11 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             ScrollView mScrollView = ((ScrollView) findViewById(R.id.textAreaScroller));
             mScrollView.scrollTo(0, mScrollView.getTop());
 
+            if (searchMenuItem.isActionViewExpanded())
+                searchMenuItem.collapseActionView();
+
             if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && this.findViewById(R.id.information_fragment).getVisibility() == View.VISIBLE)
                 HideSomeMenuItems();
-
-            searchMenuItem.collapseActionView();
         }
 
         @Override
