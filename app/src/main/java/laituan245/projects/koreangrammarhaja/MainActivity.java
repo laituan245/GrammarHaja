@@ -146,11 +146,10 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             if ((findViewById(R.id.container2)).getVisibility() == View.VISIBLE)
                 savedInt = 1;
             outState.putInt(SELECTED_TAB_POS_KEY, savedInt);
-            outState.putBoolean(SEARCH_MENU_ITEM_EXPANDING_KEY, searchMenuItem.isActionViewExpanded());
-            Log.d("TAG", "prev : " + saved_query_string);
-            if (mSearchView.getQuery().toString().length() != 0)
+            if (searchMenuItem != null)
+                outState.putBoolean(SEARCH_MENU_ITEM_EXPANDING_KEY, searchMenuItem.isActionViewExpanded());
+            if (mSearchView != null && mSearchView.getQuery().toString().length() != 0)
                 saved_query_string = mSearchView.getQuery().toString();
-            Log.d("TAG", saved_query_string);
             outState.putString(SEARCH_TEXT_KEY, saved_query_string);
         }
 
