@@ -6,6 +6,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 
+import com.startapp.android.publish.StartAppSDK;
+
 public class SplashScreen extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,8 @@ public class SplashScreen extends Activity {
 
         @Override
         protected Void doInBackground(Void... arg0) {
+            // For showing StartApp ads
+            StartAppSDK.init(SplashScreen.this, "105457300", "205847848", false);
             return null;
         }
 

@@ -42,6 +42,12 @@ public class GrammarLabelsFragment extends ListFragment {
         setListAdapter(new ArrayAdapter<String>(getActivity(), layout, GrammarLabels));
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getListView().setScrollbarFadingEnabled(false);
+    }
+
     private String removeUnnecessaryChars(String inputText) {
         String tempString = inputText.replaceAll(" ", "");
         tempString =  tempString.replaceAll("/", "");
