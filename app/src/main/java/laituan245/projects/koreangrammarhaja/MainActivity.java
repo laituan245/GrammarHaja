@@ -109,17 +109,12 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
 
 
             if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                LinearLayout adContainerLayout = (LinearLayout) this.findViewById(R.id.startAppBannerContainer);
                 if (savedInstanceState == null || InformationFragment.mCurrentPosition == -1) {
                     (findViewById(R.id.information_fragment)).setVisibility(View.GONE);
-                    (this.findViewById(R.id.biggest_layout)).setBackgroundColor(0x00000000);
-                    adContainerLayout.setBackgroundColor(0x00000000);
                 }
                 else {
                     int tempInt = savedInstanceState.getInt(SELECTED_TAB_POS_KEY, 0);
                     if (tempInt == 0) {
-                        adContainerLayout.setBackgroundColor(Color.parseColor("#FDFDFD"));
-                        (this.findViewById(R.id.biggest_layout)).setBackgroundColor(Color.parseColor("#FDFDFD"));
                         (findViewById(R.id.information_fragment)).setVisibility(View.VISIBLE);
                         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                     }
@@ -203,8 +198,9 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                         (findViewById(R.id.container2)).setVisibility(View.VISIBLE);
 
                         // "Resetting" the content of tab "Home"
-                        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+                        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                             (findViewById(R.id.information_fragment)).setVisibility(View.GONE);
+                        }
                         InformationFragment grammarInfoFrag = (InformationFragment)
                                 getSupportFragmentManager().findFragmentById(R.id.information_fragment);
                         grammarInfoFrag.updateInformationView(-1);
@@ -225,6 +221,8 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                             card.setContent(allArticleArray.get(i).getContent());
                             mCardArrayAdapter.add(card);
                         }
+
+
 
                     }
 
@@ -325,9 +323,6 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                         InformationFragment.mCurrentPosition = -1;
                         getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
                         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                        (this.findViewById(R.id.biggest_layout)).setBackgroundColor(0x00000000);
-                        (this.findViewById(R.id.startAppBannerContainer)).setBackgroundColor(0x00000000);
-
                     }
                     return true;
                 case R.id.action_rate:
@@ -354,9 +349,6 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 android.support.v7.app.ActionBar actionBar =  getSupportActionBar() ;
                 actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                LinearLayout adContainerLayout = (LinearLayout) this.findViewById(R.id.startAppBannerContainer);
-                (this.findViewById(R.id.biggest_layout)).setBackgroundColor(Color.parseColor("#FDFDFD"));
-                adContainerLayout.setBackgroundColor(Color.parseColor("#FDFDFD"));
             }
 
             InformationFragment grammarInfoFrag = (InformationFragment)
@@ -380,8 +372,6 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 InformationFragment.mCurrentPosition = -1;
                 getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                (this.findViewById(R.id.biggest_layout)).setBackgroundColor(0x00000000);
-                (this.findViewById(R.id.startAppBannerContainer)).setBackgroundColor(0x00000000);
             }
             else
                 finish();

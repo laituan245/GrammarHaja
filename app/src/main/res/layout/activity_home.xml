@@ -24,26 +24,33 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:id="@+id/container2">
+
+        <com.startapp.android.publish.banner.Banner
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingTop="10dp"
+            android:id="@+id/card_list_view_container"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="10dp">
-
             <it.gmariotti.cardslib.library.view.CardListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/myCardList"
                 card:list_card_layout_resourceID="@layout/native_list_card_layout"/>
-
         </LinearLayout>
 
-    </FrameLayout>
+    </LinearLayout>
 
 </FrameLayout>
