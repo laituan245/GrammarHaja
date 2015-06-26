@@ -13,7 +13,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -47,7 +46,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         private Menu mMenu;
         private MenuItem searchMenuItem;
         private boolean saved_searchMenuItem_expanded = false;
-        private static String saved_query_string = "";
+        public static String saved_query_string = "";
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +147,6 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         @Override
         public void onSaveInstanceState(Bundle outState) {
             super.onSaveInstanceState(outState);
-            Log.d("TAG", "onSaveInstanceState");
             int savedInt = 0;
             if ((findViewById(R.id.container2)).getVisibility() == View.VISIBLE)
                 savedInt = 1;
@@ -189,7 +187,8 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                     else if (tab.getPosition() == 1) {  // Confusions tab selected
                         // Update the searchview and the menu item action_search appropriately
                         if (searchMenuItem != null) {
-                            searchMenuItem.collapseActionView();
+                            if (searchMenuItem.isActionViewExpanded())
+                                searchMenuItem.collapseActionView();
                             HideSomeMenuItems();
                         }
                         //
@@ -221,11 +220,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                             card.setContent(allArticleArray.get(i).getContent());
                             mCardArrayAdapter.add(card);
                         }
-
-
-
                     }
-
                 }
 
                 public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {

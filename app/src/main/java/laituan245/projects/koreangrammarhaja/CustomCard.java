@@ -32,6 +32,7 @@ public class CustomCard extends Card {
         setOnClickListener(new OnCardClickListener() {
             @Override
             public void onClick(Card card, View view) {
+                Log.d("TAG", MainActivity.saved_query_string + " Inside CustomCard.java");
                 Intent intent = new Intent(card.getContext(), ConfusingGrammarActivity.class);
                 intent.putExtra(ConfusingGrammarActivity.CONFUSING_GRAMMAR_CONTENT_KEY, content);
                 intent.putExtra(ConfusingGrammarActivity.CONFUSING_GRAMMAR_TITLE_KEY, title);
