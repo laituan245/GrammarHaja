@@ -4,8 +4,17 @@ public class GrammarRecord {
     private int id;
     private String label;
     private String information;
+    private String category;
 
     public GrammarRecord() {
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public void setId(int id) {

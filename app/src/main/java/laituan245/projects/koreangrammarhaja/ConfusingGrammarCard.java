@@ -13,12 +13,12 @@ import it.gmariotti.cardslib.library.internal.Card;
 /**
  * Created by Tuan Lai on 6/20/2015.
  */
-public class CustomCard extends Card {
+public class ConfusingGrammarCard extends Card {
     protected String title;
     protected String shortDescription = "Welcome";
     protected String content;
 
-    public CustomCard(Context context, int innerLayout) {
+    public ConfusingGrammarCard(Context context, int innerLayout) {
         super(context, innerLayout);
         init ();
     }

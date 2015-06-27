@@ -171,6 +171,7 @@ public class DbHelper_GrammarInfoTable extends SQLiteOpenHelper {
                         obj.setId(cursor.getInt(0));
                         obj.setLabel(cursor.getString(1));
                         obj.setInformation(cursor.getString(2));
+                        obj.setCategory(cursor.getString(4));
                         list.add(obj);
                     } while (cursor.moveToNext());
                 }

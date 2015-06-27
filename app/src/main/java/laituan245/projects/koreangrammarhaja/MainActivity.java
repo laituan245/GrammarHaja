@@ -6,19 +6,18 @@ import android.content.res.Configuration;
 import android.database.SQLException;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
@@ -27,35 +26,62 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 
-import com.startapp.android.publish.StartAppSDK;
-
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.view.CardListView;
 
 public class MainActivity extends ActionBarActivity implements GrammarLabelsFragment.OnGrammarLabelSelectedListener, OnQueryTextListener{
 
+        private static final String[] GRAMMAR_CATEGORY =
+                {"Intro to the Korean Language",
+                        "Tenses",
+                        "Negative Expressions",
+                        "Particles",
+                        "Listing and Contrast",
+                        "Time Expressions",
+                        "Ability and Possibility",
+                        "Demands, Obligations, Permission / Prohibition",
+                        "Expressions of Hope",
+                        "Reasons and Causes",
+                        "Making Requests and Assisting",
+                        "Trying New Things and Experiences",
+                        "Asking Opinions and Making Suggestions",
+                        "Intentions and Plans",
+                        "Background Information and Explanations",
+                        "Purpose and Intention",
+                        "Conditions and Suppositions",
+                        "Conjecture",
+                        "Changes in Parts of Speech",
+                        "Expressions of State",
+                        "Confirming Information",
+                        "Discovery and Surprise"};
+
         public static ArrayList<GrammarRecord> allGrammarArray;
         public static ArrayList<ConfusingGrammarArticle> allArticleArray;
         private static final String SELECTED_TAB_POS_KEY = "SELECTED_TAB_POS_KEY";
         private static final String SEARCH_MENU_ITEM_EXPANDING_KEY = "SEARCH_MENU_ITEM_EXPANDING_KEY";
         private static final String SEARCH_TEXT_KEY = "SEARCH_TEXT_KEY";
+        private static final String CATEGORY_OR_LIST_KEY = "CATEGORY_OR_LIST_KEY";
         private CardArrayAdapter mCardArrayAdapter;
         private Context mContext;
         private SearchView mSearchView;
         private Menu mMenu;
         private MenuItem searchMenuItem;
         private boolean saved_searchMenuItem_expanded = false;
-        public static String saved_query_string = "";
+        private String saved_query_string = "";
+        private String category_or_list = "Category View";
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             saved_searchMenuItem_expanded = false;
             saved_query_string = "";
+            category_or_list = "Category View";
             if (savedInstanceState != null) {
                 if (savedInstanceState.getBoolean(SEARCH_MENU_ITEM_EXPANDING_KEY))
                     saved_searchMenuItem_expanded = true;
                 saved_query_string = savedInstanceState.getString(SEARCH_TEXT_KEY);
+                if (savedInstanceState.getString(CATEGORY_OR_LIST_KEY).length() > 0)
+                    category_or_list = savedInstanceState.getString(CATEGORY_OR_LIST_KEY);
             }
 
             super.onCreate(savedInstanceState);
@@ -87,7 +113,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             }
             for (int i = 0; i < allArticleArray.size(); i++)
             {
-                CustomCard card = new CustomCard(this, R.layout.card_inner_layout);
+                ConfusingGrammarCard card = new ConfusingGrammarCard(this, R.layout.card_inner_layout);
                 card.setTitle(allArticleArray.get(i).getTitle());
                 card.setShortDescription(allArticleArray.get(i).getShort_description());
                 card.setContent(allArticleArray.get(i).getContent());
@@ -100,6 +126,15 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             if (actionBar.getSelectedTab().getPosition() == 0) {       // Home tab selected
                 (findViewById(R.id.container1)).setVisibility(View.VISIBLE);
                 (findViewById(R.id.container2)).setVisibility(View.INVISIBLE);
+                if (category_or_list.toLowerCase().contains("category") == false) {
+                    Log.d("TAG", "HERE");
+                    (findViewById(R.id.container1_listview)).setVisibility(View.GONE);
+                    (findViewById(R.id.container1_categoryview)).setVisibility(View.VISIBLE);
+                }
+                else {
+                    (findViewById(R.id.container1_listview)).setVisibility(View.VISIBLE);
+                    (findViewById(R.id.container1_categoryview)).setVisibility(View.GONE);
+                }
             }
             else if (actionBar.getSelectedTab().getPosition() == 1) {  // Confusions tab selected
                 (findViewById(R.id.container1)).setVisibility(View.INVISIBLE);
@@ -108,7 +143,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
 
 
             if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                if (savedInstanceState == null || InformationFragment.mCurrentPosition == -1) {
+                if (savedInstanceState == null || InformationFragment.mCurrentPosition == -1 || (category_or_list.toLowerCase().contains("category")) == false) {
                     (findViewById(R.id.information_fragment)).setVisibility(View.GONE);
                 }
                 else {
@@ -131,6 +166,12 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             } catch (Exception ex) {
                 // Ignore
             }
+
+            // Set up "OddColumn" and "EvenColumn" (For Category View)
+            CardListView OddColumn = (CardListView) findViewById(R.id.OddColumn);
+            CardListView EvenColumn = (CardListView) findViewById(R.id.EvenColumn);
+
+            //
         }
 
         public boolean onQueryTextChange(String newText) {
@@ -156,11 +197,18 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             if (mSearchView != null && mSearchView.getQuery().toString().length() != 0)
                 saved_query_string = mSearchView.getQuery().toString();
             outState.putString(SEARCH_TEXT_KEY, saved_query_string);
+
+            String tempString = category_or_list;
+            if (mMenu.findItem(R.id.change_view_style) != null)
+                tempString = mMenu.findItem(R.id.change_view_style).getTitle().toString();
+            outState.putString(CATEGORY_OR_LIST_KEY, tempString);
         }
 
         private void ShowSomeMenuItems () {
             searchMenuItem.setVisible(true);
             mMenu.findItem(R.id.change_view_style).setVisible(true);
+            if (category_or_list.toLowerCase().contains("category") == false)
+                searchMenuItem.setVisible(false);
         }
         private void HideSomeMenuItems () {
             searchMenuItem.setVisible(false);
@@ -179,6 +227,14 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                     if (tab.getPosition() == 0) {       // Home tab selected
                         (findViewById(R.id.container1)).setVisibility(View.VISIBLE);
                         (findViewById(R.id.container2)).setVisibility(View.INVISIBLE);
+                        if (category_or_list.toLowerCase().contains("category") == false) {
+                            (findViewById(R.id.container1_listview)).setVisibility(View.GONE);
+                            (findViewById(R.id.container1_categoryview)).setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            (findViewById(R.id.container1_listview)).setVisibility(View.VISIBLE);
+                            (findViewById(R.id.container1_categoryview)).setVisibility(View.GONE);
+                        }
 
                         // Update the menu item action_search (which contains the searchview) appropriately
                         if (searchMenuItem != null)
@@ -209,12 +265,13 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                         ArrayList<Card> cards = new ArrayList<Card>();
                         mCardArrayAdapter = new CardArrayAdapter(mContext,cards);
                         CardListView cardListView = (CardListView) findViewById(R.id.myCardList);
+
                         if (cardListView!=null){
                             cardListView.setAdapter(mCardArrayAdapter);
                         }
                         for (int i = 0; i < allArticleArray.size(); i++)
                         {
-                            CustomCard card = new CustomCard(mContext, R.layout.card_inner_layout);
+                            ConfusingGrammarCard card = new ConfusingGrammarCard(mContext, R.layout.card_inner_layout);
                             card.setTitle(allArticleArray.get(i).getTitle());
                             card.setShortDescription(allArticleArray.get(i).getShort_description());
                             card.setContent(allArticleArray.get(i).getContent());
@@ -289,6 +346,18 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                     return true;
                 }
             });
+
+            //
+            MenuItem tempItem = mMenu.findItem(R.id.change_view_style);
+            if (category_or_list.toLowerCase().contains("category") == false) {
+                tempItem.setTitle(getResources().getString(R.string.list_view));
+                tempItem.setIcon(getResources().getDrawable(R.drawable.ic_action_list_view));
+                searchItem.setVisible(false);
+            }
+            else {
+                tempItem.setTitle(getResources().getString(R.string.category_view));
+                tempItem.setIcon(getResources().getDrawable(R.drawable.ic_action_dashboard_view));
+            }
             return true;
         }
 
@@ -308,6 +377,28 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         public boolean onOptionsItemSelected(MenuItem item) {
             // Handle presses on the action bar items
             switch (item.getItemId()) {
+                case R.id.change_view_style:
+                    if (searchMenuItem.isActionViewExpanded())
+                        searchMenuItem.collapseActionView();
+
+                    if (item.getTitle().toString().contains("Category")) {
+                        item.setTitle(getResources().getString(R.string.list_view));
+                        item.setIcon(getResources().getDrawable(R.drawable.ic_action_list_view));
+                        (findViewById(R.id.container1_listview)).setVisibility(View.GONE);
+                        (findViewById(R.id.container1_categoryview)).setVisibility(View.VISIBLE);
+                        category_or_list = getResources().getString(R.string.list_view);
+                        searchMenuItem.setVisible(false);
+                    }
+                    else {
+                        item.setTitle(getResources().getString(R.string.category_view));
+                        item.setIcon(getResources().getDrawable(R.drawable.ic_action_dashboard_view));
+                        (findViewById(R.id.container1_listview)).setVisibility(View.VISIBLE);
+                        (findViewById(R.id.container1_categoryview)).setVisibility(View.GONE);
+                        category_or_list = getResources().getString(R.string.category_view);
+                        searchMenuItem.setVisible(true);
+                    }
+
+                    return true;
                 case R.id.action_search:
                     this.searchMenuItem.expandActionView();
                     mSearchView.setQuery(saved_query_string, true);
