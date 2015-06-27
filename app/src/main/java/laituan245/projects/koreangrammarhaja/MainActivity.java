@@ -212,7 +212,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             outState.putString(SEARCH_TEXT_KEY, saved_query_string);
 
             String tempString = category_or_list;
-            if (mMenu.findItem(R.id.change_view_style) != null)
+            if (mMenu != null && mMenu.findItem(R.id.change_view_style) != null)
                 tempString = mMenu.findItem(R.id.change_view_style).getTitle().toString();
             outState.putString(CATEGORY_OR_LIST_KEY, tempString);
         }
