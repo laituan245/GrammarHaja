@@ -1,8 +1,6 @@
 package laituan245.projects.koreangrammarhaja;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.res.Configuration;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -14,28 +12,53 @@ import java.util.List;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.prototypes.CardWithList;
+import it.gmariotti.cardslib.library.prototypes.LinearListView;
 
 /**
  * Created by Tuan Lai on 6/20/2015.
  */
 public class GrammarCategoryCard extends CardWithList {
+
+    public class GrammarObject extends DefaultListObject {
+        protected String grammarTitle;
+
+        public GrammarObject(Card parentCard,String grammar_title) {
+            super(parentCard);
+            grammarTitle = grammar_title;
+            init();
+        }
+
+        private void init() {
+            setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(LinearListView parent, View view, int position, ListObject object) {
+                    Toast.makeText(getContext(), "Click on " + grammarTitle, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+    }
     protected String title;
+    protected int unitNb;
     protected int nbOfGrammars;
     protected ArrayList<String> grammarTitles;
 
-    public GrammarCategoryCard(Context context, int innerLayout) {
-        super(context, innerLayout);
+    public GrammarCategoryCard(Context context) {
+        super(context);
     }
 
-    public GrammarCategoryCard(Context context, int innerLayout, String category_title, ArrayList<GrammarRecord> allGrammars) {
-        super(context, innerLayout);
+    public GrammarCategoryCard(Context context, int unitNb, String category_title, ArrayList<GrammarRecord> allGrammars) {
+        super(context);
         this.title = category_title;
+        this.unitNb = unitNb;
+        grammarTitles = new ArrayList<String>();
         nbOfGrammars = 0;
-        for (int i = 0; i < allGrammars.size(); i++)
+        for (int i = 0; i < allGrammars.size(); i++) {
             if (allGrammars.get(i).getCategory().equals(this.title)) {
                 nbOfGrammars++;
                 grammarTitles.add(allGrammars.get(i).getLabel());
             }
+        }
     }
 
     @Override
@@ -43,39 +66,38 @@ public class GrammarCategoryCard extends CardWithList {
 
         //Add Header
         CardHeader header = new CardHeader(getContext());
-
+        header.setTitle("Unit " + Integer.toString(unitNb) + ": " + title);
         return header;
     }
 
     @Override
     protected void initCard() {
-
     }
 
-
-    public void setupInnerViewElements(ViewGroup parent, View view) {
-
-    }
 
     @Override
     public View setupChildView(int childPosition, ListObject object, View convertView, ViewGroup parent) {
-        View emptyView = new View(getContext());
-        return emptyView;
+        TextView grammar_title_textview = (TextView) convertView.findViewById(R.id.grammar_title);
+        GrammarObject grammarObject= (GrammarObject)object;
+        grammar_title_textview.setText(grammarObject.grammarTitle);
+        return convertView;
     }
 
     @Override
     protected List<ListObject> initChildren() {
 
         List<ListObject> mObjects = new ArrayList<ListObject>();
-
-
-
+        for (int i = 0; i < grammarTitles.size(); i++)
+        {
+            GrammarObject newGrammarObject = new GrammarObject(this, grammarTitles.get(i));
+            mObjects.add(newGrammarObject);
+        }
         return mObjects;
     }
 
     @Override
     public int getChildLayoutId() {
-        return R.layout.activity_home;
+        return R.layout.category_card_item_layout;
     }
 
     // Setters and Getters

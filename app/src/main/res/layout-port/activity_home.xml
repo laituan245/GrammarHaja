@@ -36,20 +36,10 @@
             android:paddingTop = "5dp">
 
             <it.gmariotti.cardslib.library.view.CardListView
-                android:padding = "5dp"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:id="@+id/OddColumn"
-                card:list_card_layout_resourceID="@layout/native_list_card_layout"/>
-
-            <it.gmariotti.cardslib.library.view.CardListView
-                android:padding = "5dp"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
                 android:id="@+id/EvenColumn"
-                card:list_card_layout_resourceID="@layout/native_list_card_layout"/>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+            />
 
         </LinearLayout>
 

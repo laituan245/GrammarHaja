@@ -12,7 +12,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -46,14 +45,14 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                         "Making Requests and Assisting",
                         "Trying New Things and Experiences",
                         "Asking Opinions and Making Suggestions",
-                        "Intentions and Plans",
-                        "Background Information and Explanations",
+                        //"Intentions and Plans",
+                        //"Background Information and Explanations",
                         "Purpose and Intention",
                         "Conditions and Suppositions",
-                        "Conjecture",
+                        //"Conjecture",
                         "Changes in Parts of Speech",
-                        "Expressions of State",
-                        "Confirming Information",
+                        //"Expressions of State",
+                        //"Confirming Information",
                         "Discovery and Surprise"};
 
         public static ArrayList<GrammarRecord> allGrammarArray;
@@ -108,6 +107,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             ArrayList<Card> cards = new ArrayList<Card>();
             mCardArrayAdapter = new CardArrayAdapter(this,cards);
             CardListView cardListView = (CardListView) findViewById(R.id.myCardList);
+            cardListView.setScrollbarFadingEnabled(false);
             if (cardListView!=null){
                 cardListView.setAdapter(mCardArrayAdapter);
             }
@@ -127,7 +127,6 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 (findViewById(R.id.container1)).setVisibility(View.VISIBLE);
                 (findViewById(R.id.container2)).setVisibility(View.INVISIBLE);
                 if (category_or_list.toLowerCase().contains("category") == false) {
-                    Log.d("TAG", "HERE");
                     (findViewById(R.id.container1_listview)).setVisibility(View.GONE);
                     (findViewById(R.id.container1_categoryview)).setVisibility(View.VISIBLE);
                 }
@@ -167,9 +166,23 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 // Ignore
             }
 
-            // Set up "OddColumn" and "EvenColumn" (For Category View)
-            CardListView OddColumn = (CardListView) findViewById(R.id.OddColumn);
+            // Set up "EvenColumn" (For Category View)
             CardListView EvenColumn = (CardListView) findViewById(R.id.EvenColumn);
+            EvenColumn.setScrollbarFadingEnabled(false);
+            ArrayList<Card> EvenCards = new ArrayList<Card>();
+
+            CardArrayAdapter EvenCardArrayAdapter = new CardArrayAdapter(this,EvenCards);
+
+            if (EvenColumn!=null){
+                EvenColumn.setAdapter(EvenCardArrayAdapter);
+            }
+
+            for (int i = 0; i < GRAMMAR_CATEGORY.length; i++)
+            {
+                GrammarCategoryCard card = new GrammarCategoryCard(this, i, GRAMMAR_CATEGORY[i], allGrammarArray);
+                card.init();
+                EvenCardArrayAdapter.add(card);
+            }
 
             //
         }
@@ -239,6 +252,22 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                         // Update the menu item action_search (which contains the searchview) appropriately
                         if (searchMenuItem != null)
                             ShowSomeMenuItems();
+
+                        // Set up "EvenColumn" (For Category View)
+                        CardListView EvenColumn = (CardListView) findViewById(R.id.EvenColumn);
+                        ArrayList<Card> EvenCards = new ArrayList<Card>();
+                        CardArrayAdapter EvenCardArrayAdapter = new CardArrayAdapter(mContext,EvenCards);
+                        EvenColumn.setScrollbarFadingEnabled(false);
+                        if (EvenColumn!=null){
+                            EvenColumn.setAdapter(EvenCardArrayAdapter);
+                        }
+
+                        for (int i = 0; i < GRAMMAR_CATEGORY.length; i++)
+                        {
+                            GrammarCategoryCard card = new GrammarCategoryCard(mContext, i,  GRAMMAR_CATEGORY[i], allGrammarArray);
+                            card.init();
+                            EvenCardArrayAdapter.add(card);
+                        }
                     }
                     else if (tab.getPosition() == 1) {  // Confusions tab selected
                         // Update the searchview and the menu item action_search appropriately
@@ -265,7 +294,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                         ArrayList<Card> cards = new ArrayList<Card>();
                         mCardArrayAdapter = new CardArrayAdapter(mContext,cards);
                         CardListView cardListView = (CardListView) findViewById(R.id.myCardList);
-
+                        cardListView.setScrollbarFadingEnabled(false);
                         if (cardListView!=null){
                             cardListView.setAdapter(mCardArrayAdapter);
                         }
