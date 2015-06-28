@@ -16,12 +16,12 @@
         android:layout_marginRight="12dp"
         android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
-        android:minHeight="55dp">
+        android:minHeight="45dp">
 
         <TextView
             android:id="@+id/grammar_title"
             android:textColor="#FF8040"
-            android:textSize="19sp"
+            android:textSize="18sp"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

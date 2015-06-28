@@ -1,6 +1,8 @@
 package laituan245.projects.koreangrammarhaja;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -32,7 +34,9 @@ public class GrammarCategoryCard extends CardWithList {
             setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(LinearListView parent, View view, int position, ListObject object) {
-                    Toast.makeText(getContext(), "Click on " + grammarTitle, Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(view.getContext(), NormalGrammarActivity.class);
+                    intent.putExtra(NormalGrammarActivity.GRAMMAR_TITLE_KEY, grammarTitle);
+                    view.getContext().startActivity(intent);
                 }
             });
         }
@@ -65,7 +69,7 @@ public class GrammarCategoryCard extends CardWithList {
     protected CardHeader initCardHeader() {
 
         //Add Header
-        CardHeader header = new CardHeader(getContext());
+        CardHeader header = new CardHeader(getContext(), R.layout.category_card_header_layout);
         header.setTitle("Unit " + Integer.toString(unitNb) + ": " + title);
         return header;
     }
