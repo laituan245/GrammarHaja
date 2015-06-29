@@ -45,7 +45,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                         "Making Requests and Assisting",
                         "Trying New Things and Experiences",
                         "Asking Opinions and Making Suggestions",
-                        //"Intentions and Plans",
+                        "Intentions and Plans",
                         //"Background Information and Explanations",
                         "Purpose and Intention",
                         "Conditions and Suppositions",
