@@ -3,6 +3,7 @@ package laituan245.projects.koreangrammarhaja;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -77,8 +78,7 @@ public class ConfusingGrammarCard extends Card {
         }
 
         mTitle.setText(title);
-        mShortDescription.setText(shortDescription);
-
+        mShortDescription.setText(Html.fromHtml(shortDescription));
     }
 
 }
