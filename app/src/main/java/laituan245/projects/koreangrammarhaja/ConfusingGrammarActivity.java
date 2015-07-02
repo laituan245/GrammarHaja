@@ -6,17 +6,14 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewConfiguration;
 import android.widget.TextView;
-
 import java.lang.reflect.Field;
 
 /**
@@ -32,8 +29,8 @@ public class ConfusingGrammarActivity extends ActionBarActivity {
         text = "<h3>" + title + "</h3><br/>" + text;
         text = text.replaceAll("  ", "&nbsp;&nbsp;");
         text = text.replaceAll("\n", "<br/>");
-        text = text.replaceAll ("-->", "&#8594;");
-        text = text.replaceAll ("<usage>", "<b>");
+        text = text.replaceAll("-->", "&#8594;");
+        text = text.replaceAll("<usage>", "<b>");
         text = text.replaceAll ("</usage>", "</b>");
         text = text.replaceAll ("<example>", "<b><i>");
         text = text.replaceAll ("</example>", "</i></b>");
@@ -60,7 +57,7 @@ public class ConfusingGrammarActivity extends ActionBarActivity {
         // Get data from the intent
         title = this.getIntent().getExtras().getString(CONFUSING_GRAMMAR_TITLE_KEY);
         content = this.getIntent().getExtras().getString(CONFUSING_GRAMMAR_CONTENT_KEY);
-        TextView mTextView = ((TextView) (findViewById(R.id.content_textview)));
+        final TextView mTextView = ((TextView) (findViewById(R.id.content_textview)));
         mTextView.setText(Html.fromHtml(HTMLPreprocessing(content, title)));
         // Set the text size appropriately
         if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
@@ -114,4 +111,6 @@ public class ConfusingGrammarActivity extends ActionBarActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
 }

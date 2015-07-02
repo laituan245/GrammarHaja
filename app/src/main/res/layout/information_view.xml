@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout
+    <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:paddingLeft="5dp"
         android:background="#FDFDFD">
 
@@ -16,6 +15,7 @@
             android:scrollbars="vertical">
             <TextView
                 android:paddingRight="5dp"
+                android:paddingBottom="90dp"
                 android:id="@+id/information"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -23,4 +23,10 @@
             />
         </ScrollView>
 
-    </LinearLayout>
+        <com.startapp.android.publish.banner.Banner
+            android:layout_gravity="bottom|center_horizontal"
+            android:id="@+id/startAppBanner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </FrameLayout>
