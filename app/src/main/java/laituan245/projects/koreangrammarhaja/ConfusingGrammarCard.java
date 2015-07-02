@@ -21,7 +21,8 @@ public class ConfusingGrammarCard extends Card {
 
     public ConfusingGrammarCard(Context context, int innerLayout) {
         super(context, innerLayout);
-        init ();
+        init();
+        setBackgroundResource(context.getResources().getDrawable(R.drawable.card_selector));
     }
 
     private void init(){
