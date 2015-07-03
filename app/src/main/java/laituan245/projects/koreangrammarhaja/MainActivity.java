@@ -25,6 +25,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 
+import com.ironsource.mobilcore.MobileCore;
+
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.view.CardListView;
@@ -61,6 +63,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         private static final String SEARCH_MENU_ITEM_EXPANDING_KEY = "SEARCH_MENU_ITEM_EXPANDING_KEY";
         private static final String SEARCH_TEXT_KEY = "SEARCH_TEXT_KEY";
         private static final String CATEGORY_OR_LIST_KEY = "CATEGORY_OR_LIST_KEY";
+        private static final String NB_INTERACTION_KEY = "NB_INTERACTION_KEY";
         private CardArrayAdapter mCardArrayAdapter;
         private Context mContext;
         private SearchView mSearchView;
@@ -69,21 +72,28 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         private boolean saved_searchMenuItem_expanded = false;
         private String saved_query_string = "";
         private String category_or_list = "Category View";
+        private int nb_interaction = 0;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             saved_searchMenuItem_expanded = false;
             saved_query_string = "";
             category_or_list = "Category View";
+            nb_interaction = 0;
             if (savedInstanceState != null) {
                 if (savedInstanceState.getBoolean(SEARCH_MENU_ITEM_EXPANDING_KEY))
                     saved_searchMenuItem_expanded = true;
                 saved_query_string = savedInstanceState.getString(SEARCH_TEXT_KEY);
                 if (savedInstanceState.getString(CATEGORY_OR_LIST_KEY).length() > 0)
                     category_or_list = savedInstanceState.getString(CATEGORY_OR_LIST_KEY);
+                nb_interaction = savedInstanceState.getInt(NB_INTERACTION_KEY, 0);
             }
 
             super.onCreate(savedInstanceState);
+
+            // initialize the mobileCore SDK
+            MobileCore.init(this, "8Z2N9Z7H90H6D82ICWZ35XUZSAJNL", MobileCore.LOG_TYPE.PRODUCTION, MobileCore.AD_UNITS.INTERSTITIAL );
+
 
             loadTheDatabase();
 
@@ -215,6 +225,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             if (mMenu != null && mMenu.findItem(R.id.change_view_style) != null)
                 tempString = mMenu.findItem(R.id.change_view_style).getTitle().toString();
             outState.putString(CATEGORY_OR_LIST_KEY, tempString);
+            outState.putInt(NB_INTERACTION_KEY, nb_interaction);
         }
 
         private void ShowSomeMenuItems () {
@@ -237,6 +248,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             ActionBar.TabListener tabListener = new ActionBar.TabListener() {
                 public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                     // show the given tab
+                    nb_interaction++;
                     if (tab.getPosition() == 0) {       // Home tab selected
                         (findViewById(R.id.container1)).setVisibility(View.VISIBLE);
                         (findViewById(R.id.container2)).setVisibility(View.INVISIBLE);
@@ -463,6 +475,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         }
 
         public void onGrammarSelected(int position) {
+            nb_interaction++;
             if (searchMenuItem.isActionViewExpanded())
                 position = GrammarLabelsFragment.LabelMapping[position];
             if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -484,6 +497,11 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
 
             if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && this.findViewById(R.id.information_fragment).getVisibility() == View.VISIBLE)
                 HideSomeMenuItems();
+
+            if (nb_interaction >= 6 && MobileCore.isInterstitialReady()) {
+                MobileCore.showInterstitial(this, null);
+                nb_interaction = -20000;
+            }
         }
 
         @Override
