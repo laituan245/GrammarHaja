@@ -5,8 +5,17 @@ public class GrammarRecord {
     private String label;
     private String information;
     private String category;
+    private String englishLabel;
 
     public GrammarRecord() {
+    }
+
+    public String getEnglishLabel() {
+        return englishLabel;
+    }
+
+    public void setEnglishLabel(String englishLabel) {
+        this.englishLabel = englishLabel;
     }
 
     public String getCategory() {

@@ -3,11 +3,10 @@ package laituan245.projects.koreangrammarhaja;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +22,12 @@ public class GrammarCategoryCard extends CardWithList {
 
     public class GrammarObject extends DefaultListObject {
         protected String grammarTitle;
+        protected String englishTitle;
 
-        public GrammarObject(Card parentCard,String grammar_title) {
+        public GrammarObject(Card parentCard,String grammar_title, String english_title) {
             super(parentCard);
             grammarTitle = grammar_title;
+            this.englishTitle = english_title;
             init();
         }
 
@@ -42,25 +43,29 @@ public class GrammarCategoryCard extends CardWithList {
         }
 
     }
+    protected Context mContext;
     protected String title;
     protected int unitNb;
     protected int nbOfGrammars;
     protected ArrayList<String> grammarTitles;
-
+    protected ArrayList<String> englishTitles;
     public GrammarCategoryCard(Context context) {
         super(context);
     }
 
     public GrammarCategoryCard(Context context, int unitNb, String category_title, ArrayList<GrammarRecord> allGrammars) {
         super(context);
+        mContext = context;
         this.title = category_title;
         this.unitNb = unitNb;
         grammarTitles = new ArrayList<String>();
+        englishTitles = new ArrayList<String>();
         nbOfGrammars = 0;
         for (int i = 0; i < allGrammars.size(); i++) {
             if (allGrammars.get(i).getCategory().equals(this.title)) {
                 nbOfGrammars++;
                 grammarTitles.add(allGrammars.get(i).getLabel());
+                englishTitles.add(allGrammars.get(i).getEnglishLabel());
             }
         }
     }
@@ -70,7 +75,10 @@ public class GrammarCategoryCard extends CardWithList {
 
         //Add Header
         CardHeader header = new CardHeader(getContext(), R.layout.category_card_header_layout);
-        header.setTitle("Unit " + Integer.toString(unitNb) + ": " + title);
+        if ((mContext.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL)
+            header.setTitle(title);
+        else
+            header.setTitle("Unit " + Integer.toString(unitNb) + ": " + title);
         return header;
     }
 
@@ -82,8 +90,15 @@ public class GrammarCategoryCard extends CardWithList {
     @Override
     public View setupChildView(int childPosition, ListObject object, View convertView, ViewGroup parent) {
         TextView grammar_title_textview = (TextView) convertView.findViewById(R.id.grammar_title);
+
+        // Set the text size appropriately
+        if ((mContext.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            grammar_title_textview.setTextSize(16);
+        }
+
         GrammarObject grammarObject= (GrammarObject)object;
-        grammar_title_textview.setText(grammarObject.grammarTitle);
+        String tempString = grammarObject.grammarTitle + " <font color='black'>(" + grammarObject.englishTitle + ")</font>";
+        grammar_title_textview.setText(Html.fromHtml(tempString));
         return convertView;
     }
 
@@ -93,7 +108,7 @@ public class GrammarCategoryCard extends CardWithList {
         List<ListObject> mObjects = new ArrayList<ListObject>();
         for (int i = 0; i < grammarTitles.size(); i++)
         {
-            GrammarObject newGrammarObject = new GrammarObject(this, grammarTitles.get(i));
+            GrammarObject newGrammarObject = new GrammarObject(this, grammarTitles.get(i), englishTitles.get(i));
             mObjects.add(newGrammarObject);
         }
         return mObjects;
