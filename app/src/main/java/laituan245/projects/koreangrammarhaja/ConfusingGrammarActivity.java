@@ -107,6 +107,10 @@ public class ConfusingGrammarActivity extends ActionBarActivity {
                 i.putExtra(android.content.Intent.EXTRA_TEXT, "This is an awesome app for learning Korean. https://play.google.com/store/apps/details?id=laituan245.projects.koreangrammarhaja");
                 startActivity(Intent.createChooser(i,"Share via"));
                 return true;
+            case R.id.action_learn_more:
+                Intent fbIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/koreanhaja"));
+                startActivity(fbIntent);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

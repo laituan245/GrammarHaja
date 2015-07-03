@@ -18,6 +18,12 @@
     />
 
     <item
+        android:id="@+id/action_learn_more"
+        yourapp:showAsAction="never"
+        android:title="@string/learn_more"
+    />
+
+    <item
         android:id="@+id/action_share"
         yourapp:showAsAction="never"
         android:title="@string/action_share"/>

@@ -363,6 +363,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                     (mMenu.findItem(R.id.change_view_style)).setVisible(false);
                     (mMenu.findItem(R.id.action_rate)).setVisible(false);
                     (mMenu.findItem(R.id.action_share)).setVisible(false);
+                    (mMenu.findItem(R.id.action_learn_more)).setVisible(false);
                     return true;
                 }
 
@@ -371,6 +372,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                     (mMenu.findItem(R.id.change_view_style)).setVisible(true);
                     (mMenu.findItem(R.id.action_rate)).setVisible(true);
                     (mMenu.findItem(R.id.action_share)).setVisible(true);
+                    (mMenu.findItem(R.id.action_learn_more)).setVisible(true);
                     saved_query_string = mSearchView.getQuery().toString();
                     return true;
                 }
@@ -450,6 +452,10 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                     i.putExtra(android.content.Intent.EXTRA_SUBJECT,"Korean Haja");
                     i.putExtra(android.content.Intent.EXTRA_TEXT, "This is an awesome app for learning Korean. https://play.google.com/store/apps/details?id=laituan245.projects.koreangrammarhaja");
                     startActivity(Intent.createChooser(i,"Share via"));
+                    return true;
+                case R.id.action_learn_more:
+                    Intent fbIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/koreanhaja"));
+                    startActivity(fbIntent);
                     return true;
                 default:
                     return super.onOptionsItemSelected(item);

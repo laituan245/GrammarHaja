@@ -7,6 +7,7 @@
     <string name="action_search">Search</string>
     <string name="action_rate">Rate This App</string>
     <string name="action_share">Share This App</string>
+    <string name="learn_more">Learn More Korean</string>
     <string name="search_hint">Search grammars ...</string>
     <string name="list_view">List View</string>
     <string name="category_view">Category View</string>

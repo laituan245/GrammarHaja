@@ -6,18 +6,14 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewConfiguration;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.lang.reflect.Field;
 
 public class NormalGrammarActivity extends ActionBarActivity {
@@ -39,7 +35,6 @@ public class NormalGrammarActivity extends ActionBarActivity {
 
         // Get data from the intent
         String grammarTitle = this.getIntent().getExtras().getString(GRAMMAR_TITLE_KEY);
-        Log.d("TAG", grammarTitle);
         TextView mTextView = ((TextView) (findViewById(R.id.information)));
         String informationStr = "";
         for (int i = 0; i < MainActivity.allGrammarArray.size(); i++)
@@ -111,6 +106,10 @@ public class NormalGrammarActivity extends ActionBarActivity {
                 i.putExtra(android.content.Intent.EXTRA_SUBJECT,"Korean Haja");
                 i.putExtra(android.content.Intent.EXTRA_TEXT, "This is an awesome app for learning Korean. https://play.google.com/store/apps/details?id=laituan245.projects.koreangrammarhaja");
                 startActivity(Intent.createChooser(i,"Share via"));
+                return true;
+            case R.id.action_learn_more:
+                Intent fbIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/koreanhaja"));
+                startActivity(fbIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
