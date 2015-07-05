@@ -62,6 +62,10 @@ public class InformationFragment extends Fragment {
         if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
             information.setTextSize(16);
         }
+        if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_SMALL) {
+            information.setTextSize(16);
+        }
+
         information.setText(Html.fromHtml(preProcessingGrammarInfo(InformationArray[position], GrammarLabelsFragment.GrammarLabels[position])));
         mCurrentPosition = position;
     }

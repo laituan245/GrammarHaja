@@ -77,6 +77,9 @@ public class ConfusingGrammarCard extends Card {
         if ((parent.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
             mShortDescription.setTextSize(15);
         }
+        if ((parent.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_SMALL) {
+            mShortDescription.setTextSize(15);
+        }
 
         mTitle.setText(title);
         mShortDescription.setText(Html.fromHtml(shortDescription));

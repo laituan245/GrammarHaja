@@ -63,6 +63,9 @@ public class ConfusingGrammarActivity extends ActionBarActivity {
         if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
             mTextView.setTextSize(16);
         }
+        if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_SMALL) {
+            mTextView.setTextSize(16);
+        }
 
         // Force the overflow button to appear on the action bar
         try {

@@ -212,7 +212,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 MaterialDialog dialog = new MaterialDialog.Builder(this)
                         .title("Tips").customView(R.layout.tip_dialog_layout, wrapInScrollView)
                         .icon(getResources().getDrawable(R.drawable.ic_launcher))
-                        .positiveText("Ok. Thanks.")
+                        .positiveText("Got it. Thanks")
                         .dismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialog) {

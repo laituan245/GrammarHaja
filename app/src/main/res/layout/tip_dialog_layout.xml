@@ -8,22 +8,22 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
+        android:textSize="19sp"
         android:paddingBottom="10dp"
-        android:text="You are viewing grammars in list mode."/>
+        android:text="You are now in list mode."/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="7dp">
+        android:paddingBottom="6dp">
         <ImageView
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_search"/>
         <TextView
-            android:textSize = "17sp"
+            android:textSize = "16sp"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,14 +34,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="12dp">
+        android:paddingBottom="11dp">
         <ImageView
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_action_dashboard_view"/>
         <TextView
-            android:textSize = "17sp"
+            android:textSize = "16sp"
             android:layout_gravity="center_vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
     </LinearLayout>
 
     <CheckBox
-        android:textSize = "16sp"
+        android:textSize = "15sp"
         android:layout_gravity="right"
         android:id="@+id/chkdonotshowagain"
         android:layout_width="wrap_content"

@@ -47,6 +47,9 @@ public class NormalGrammarActivity extends ActionBarActivity {
         if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
             mTextView.setTextSize(16);
         }
+        if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_SMALL) {
+            mTextView.setTextSize(16);
+        }
 
         mTextView.setText(Html.fromHtml(preProcessingGrammarInfo(informationStr, grammarTitle)));
 

@@ -75,10 +75,11 @@ public class GrammarCategoryCard extends CardWithList {
 
         //Add Header
         CardHeader header = new CardHeader(getContext(), R.layout.category_card_header_layout);
+        header.setTitle("Unit " + Integer.toString(unitNb) + ": " + title);
         if ((mContext.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL)
             header.setTitle(title);
-        else
-            header.setTitle("Unit " + Integer.toString(unitNb) + ": " + title);
+        if ((mContext.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_SMALL)
+            header.setTitle(title);
         return header;
     }
 
@@ -93,6 +94,9 @@ public class GrammarCategoryCard extends CardWithList {
 
         // Set the text size appropriately
         if ((mContext.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            grammar_title_textview.setTextSize(16);
+        }
+        if ((mContext.getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_SMALL) {
             grammar_title_textview.setTextSize(16);
         }
 
