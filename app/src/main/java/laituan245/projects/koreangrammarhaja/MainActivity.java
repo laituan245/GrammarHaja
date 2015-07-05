@@ -1,7 +1,9 @@
 package laituan245.projects.koreangrammarhaja;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.SQLException;
 import android.graphics.Color;
@@ -12,11 +14,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.widget.CheckBox;
 import android.widget.ScrollView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
@@ -24,7 +28,9 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
+import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.ironsource.mobilcore.MobileCore;
 
 import it.gmariotti.cardslib.library.internal.Card;
@@ -64,6 +70,8 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         private static final String SEARCH_TEXT_KEY = "SEARCH_TEXT_KEY";
         private static final String CATEGORY_OR_LIST_KEY = "CATEGORY_OR_LIST_KEY";
         private static final String NB_INTERACTION_KEY = "NB_INTERACTION_KEY";
+        private static final String DO_NOT_SHOW_TIPS_KEY = "DO_NOT_SHOW_TIPS_KEY";
+        private static final String DISMISS_DIALOG_KEY = "DISMISS_DIALOG_KEY";
         private CardArrayAdapter mCardArrayAdapter;
         private Context mContext;
         private SearchView mSearchView;
@@ -73,9 +81,11 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         private String saved_query_string = "";
         private String category_or_list = "Category View";
         private int nb_interaction = 0;
+        private boolean dismissedDialog = false;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
+            dismissedDialog = false;
             saved_searchMenuItem_expanded = false;
             saved_query_string = "";
             category_or_list = "Category View";
@@ -87,6 +97,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 if (savedInstanceState.getString(CATEGORY_OR_LIST_KEY).length() > 0)
                     category_or_list = savedInstanceState.getString(CATEGORY_OR_LIST_KEY);
                 nb_interaction = savedInstanceState.getInt(NB_INTERACTION_KEY, 0);
+                dismissedDialog = savedInstanceState.getBoolean(DISMISS_DIALOG_KEY, false);
             }
 
             super.onCreate(savedInstanceState);
@@ -195,6 +206,33 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             }
 
             //
+            SharedPreferences prefs = this.getSharedPreferences("laituan245.projects.koreangrammarhaja", Context.MODE_PRIVATE);
+            boolean doNotShowTips = prefs.getBoolean(DO_NOT_SHOW_TIPS_KEY, false);
+            Log.d("TAG", "doNotShowTips = " + Boolean.toString(doNotShowTips));
+            if ((dismissedDialog == false || savedInstanceState == null) && doNotShowTips == false) {
+                boolean wrapInScrollView = true;
+                MaterialDialog dialog = new MaterialDialog.Builder(this)
+                        .title("Tips").customView(R.layout.tip_dialog_layout, wrapInScrollView)
+                        .icon(getResources().getDrawable(R.drawable.ic_launcher))
+                        .positiveText("Ok. Thanks.")
+                        .dismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                dismissedDialog = true;
+                                MaterialDialog tempDialog = (MaterialDialog) dialog;
+                                View v = tempDialog.getCustomView();
+                                boolean isChecked = ((CheckBox) v.findViewById(R.id.chkdonotshowagain)).isChecked();
+                                SharedPreferences prefs = ((MaterialDialog) dialog).getContext().getSharedPreferences("laituan245.projects.koreangrammarhaja", Context.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = prefs.edit();
+                                editor.putBoolean(DO_NOT_SHOW_TIPS_KEY, isChecked);
+                                Log.d("TAG", "isChecked = " + Boolean.toString(isChecked));
+                                editor.apply();
+                            }
+                        }).build();
+                dialog.setCanceledOnTouchOutside(false);
+
+                dialog.show();
+            }
         }
 
         public boolean onQueryTextChange(String newText) {
@@ -226,6 +264,8 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 tempString = mMenu.findItem(R.id.change_view_style).getTitle().toString();
             outState.putString(CATEGORY_OR_LIST_KEY, tempString);
             outState.putInt(NB_INTERACTION_KEY, nb_interaction);
+            outState.putBoolean(DISMISS_DIALOG_KEY, dismissedDialog);
+            outState.putString ("TEMP_STRING_KEY", "TEMP STRING");
         }
 
         private void ShowSomeMenuItems () {

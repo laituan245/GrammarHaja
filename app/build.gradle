@@ -31,6 +31,10 @@ dependencies {
 }
 
 dependencies {
+    compile 'com.afollestad:material-dialogs:0.7.6.0'
+}
+
+dependencies {
     //Core
     compile 'com.github.gabrielemariotti.cards:cardslib-core:2.0.1'
 
