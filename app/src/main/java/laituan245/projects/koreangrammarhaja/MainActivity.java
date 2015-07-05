@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -208,7 +207,6 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
             //
             SharedPreferences prefs = this.getSharedPreferences("laituan245.projects.koreangrammarhaja", Context.MODE_PRIVATE);
             boolean doNotShowTips = prefs.getBoolean(DO_NOT_SHOW_TIPS_KEY, false);
-            Log.d("TAG", "doNotShowTips = " + Boolean.toString(doNotShowTips));
             if ((dismissedDialog == false || savedInstanceState == null) && doNotShowTips == false) {
                 boolean wrapInScrollView = true;
                 MaterialDialog dialog = new MaterialDialog.Builder(this)
@@ -225,7 +223,6 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                                 SharedPreferences prefs = ((MaterialDialog) dialog).getContext().getSharedPreferences("laituan245.projects.koreangrammarhaja", Context.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = prefs.edit();
                                 editor.putBoolean(DO_NOT_SHOW_TIPS_KEY, isChecked);
-                                Log.d("TAG", "isChecked = " + Boolean.toString(isChecked));
                                 editor.apply();
                             }
                         }).build();
