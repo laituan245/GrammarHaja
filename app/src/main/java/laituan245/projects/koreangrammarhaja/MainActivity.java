@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                         //"Conjecture",
                         "Changes in Parts of Speech",
                         //"Expressions of State",
-                        //"Confirming Information",
+                        "Confirming Information",
                         "Discovery and Surprise"};
 
         public static ArrayList<GrammarRecord> allGrammarArray;
