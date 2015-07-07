@@ -55,7 +55,7 @@ public class DbHelper_GrammarInfoTable extends SQLiteOpenHelper {
 
                 copyDataBase();
 
-            } catch (IOException e) {
+            } catch (Exception e) {
 
                 throw new Error("Error copying database");
 
@@ -76,7 +76,7 @@ public class DbHelper_GrammarInfoTable extends SQLiteOpenHelper {
             String myPath = DB_PATH + DB_NAME;
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
 
-        }catch(SQLiteException e){
+        }catch(Exception e){
 
             //database does't exist yet.
 
