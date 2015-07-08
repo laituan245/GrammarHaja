@@ -53,14 +53,15 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                         "Trying New Things and Experiences",
                         "Asking Opinions and Making Suggestions",
                         "Intentions and Plans",
-                        //"Background Information and Explanations",
+                        "Background Information and Explanations",
                         "Purpose and Intention",
                         "Conditions and Suppositions",
                         //"Conjecture",
                         "Changes in Parts of Speech",
                         //"Expressions of State",
                         "Confirming Information",
-                        "Discovery and Surprise"};
+                        "Discovery and Surprise",
+                        "Other Miscellaneous"};
 
         public static ArrayList<GrammarRecord> allGrammarArray;
         public static ArrayList<ConfusingGrammarArticle> allArticleArray;
