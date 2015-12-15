@@ -55,7 +55,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                         "Background Information and Explanations",
                         "Purpose and Intention",
                         "Conditions and Suppositions",
-                        //"Conjecture",
+                        "Conjecture",
                         "Changes in Parts of Speech",
                         //"Expressions of State",
                         "Confirming Information",
