@@ -35,8 +35,8 @@ dependencies {
 
 dependencies {
     //Core
-    compile 'com.github.gabrielemariotti.cards:cardslib-core:2.0.1'
+    compile 'com.github.gabrielemariotti.cards:cardslib-core:2.1.0'
 
     //Optional for built-in cards
-    compile 'com.github.gabrielemariotti.cards:cardslib-cards:2.0.1'
+    compile 'com.github.gabrielemariotti.cards:cardslib-cards:2.1.0'
 }
