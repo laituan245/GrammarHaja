@@ -60,6 +60,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                         //"Expressions of State",
                         "Confirming Information",
                         "Discovery and Surprise",
+                        "Quotations",
                         "Other Miscellaneous"};
 
         public static ArrayList<GrammarRecord> allGrammarArray;
