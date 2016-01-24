@@ -30,13 +30,14 @@ import android.support.v4.view.MenuItemCompat.OnActionExpandListener;
 import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.startapp.android.publish.StartAppAd;
 
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.view.CardListView;
 
 public class MainActivity extends ActionBarActivity implements GrammarLabelsFragment.OnGrammarLabelSelectedListener, OnQueryTextListener{
-
+        private StartAppAd startAppAd = new StartAppAd(this);
         private static final String[] GRAMMAR_CATEGORY =
                 {"Intro to the Korean Language",
                         "Tenses",
@@ -256,7 +257,7 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 tempString = mMenu.findItem(R.id.change_view_style).getTitle().toString();
             outState.putString(CATEGORY_OR_LIST_KEY, tempString);
             outState.putBoolean(DISMISS_DIALOG_KEY, dismissedDialog);
-            outState.putString ("TEMP_STRING_KEY", "TEMP STRING");
+            outState.putString("TEMP_STRING_KEY", "TEMP STRING");
         }
 
         private void ShowSomeMenuItems () {
@@ -537,8 +538,10 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
                 getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             }
-            else
+            else {
+                startAppAd.onBackPressed();
                 finish();
+            }
         }
 
         private void loadTheDatabase() {
@@ -578,9 +581,15 @@ public class MainActivity extends ActionBarActivity implements GrammarLabelsFrag
         }
 
         @Override
+        public void onPause() {
+            super.onPause();
+            startAppAd.onPause();
+        }
+
+        @Override
         protected void onResume() {
             super.onResume();
-
+            startAppAd.onResume();
             if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT && InformationFragment.mCurrentPosition == -1)
                 (findViewById(R.id.information_fragment)).setVisibility(View.GONE);
 
