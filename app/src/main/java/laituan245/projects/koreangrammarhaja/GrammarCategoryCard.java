@@ -101,7 +101,14 @@ public class GrammarCategoryCard extends CardWithList {
         }
 
         GrammarObject grammarObject= (GrammarObject)object;
-        String tempString = grammarObject.grammarTitle + " <font color='black'>(" + grammarObject.englishTitle + ")</font>";
+        String tempString = grammarObject.grammarTitle;
+        try {
+            if (grammarObject.englishTitle.trim().length() > 0)
+                tempString = tempString + " <font color='black'>(" + grammarObject.englishTitle + ")</font>";
+        }
+        catch (Exception e) {
+
+        }
         grammar_title_textview.setText(Html.fromHtml(tempString));
         return convertView;
     }
